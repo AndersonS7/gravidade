@@ -15,33 +15,27 @@ public class MyGravity : MonoBehaviour
     void Start()
     {
         velG = 0.05f;
-        rb = GetComponent<Rigidbody2D>();
+        if (GetComponent<Rigidbody2D>() != null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+        }
+        else
+        {
+            print($"Precisa adicionar um RigidBody ao objeto <{gameObject.name.ToUpper()}>");
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        FindForceBetweenPlanets();
-        PointToDirection();
+        //PointToDirection();
+        FindPlanet();
+        AddForceToBody();
 
-        direction = targetPlanet.transform.position - transform.position; // mostra a direção da nave para o planeta
-        rb.AddForce(direction * velG); // aplica a força G
-    }
-
-    void FindForceBetweenPlanets()
-    {
-        planets = GameObject.FindGameObjectsWithTag("planet");
+        direction = targetPlanet.transform.position - transform.position;
         forceGMax = 0;
-        foreach (var planet in planets)
-        {
-            forceGPlanet = planet.transform.localScale.z / Vector2.Distance(transform.position, planet.transform.position);
-            if (forceGPlanet > forceGMax)
-            {
-                forceGMax = forceGPlanet;
-                targetPlanet = planet;
-            }
-        }
     }
+
     void PointToDirection()
     {
         if (Vector2.Distance(transform.position, targetPlanet.transform.position) < 3.5f)
@@ -53,7 +47,28 @@ public class MyGravity : MonoBehaviour
         }
         else
         {
-            transform.rotation = Quaternion.Euler(0,0,0);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+    }
+    void AddForceToBody()
+    {
+        if (rb != null)
+        {
+            rb.AddForce(direction * velG);
+            print(direction * velG);
+        }
+    }
+    void FindPlanet()
+    {
+        planets = GameObject.FindGameObjectsWithTag("planet");
+        foreach (var planet in planets)
+        {
+            forceGPlanet = planet.transform.localScale.z / Vector2.Distance(transform.position, planet.transform.position);
+            if (forceGPlanet > forceGMax)
+            {
+                forceGMax = forceGPlanet;
+                targetPlanet = planet;
+            }
         }
     }
 
