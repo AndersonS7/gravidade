@@ -31,6 +31,7 @@ public class MyGravity : MonoBehaviour
         //PointToDirection();
         FindPlanet();
         AddForceToBody();
+        MousePosition();
 
         direction = targetPlanet.transform.position - transform.position;
         forceGMax = 0;
@@ -55,7 +56,6 @@ public class MyGravity : MonoBehaviour
         if (rb != null)
         {
             rb.AddForce(direction * velG);
-            print(direction * velG);
         }
     }
     void FindPlanet()
@@ -71,7 +71,16 @@ public class MyGravity : MonoBehaviour
             }
         }
     }
+    void MousePosition()
+    {
+        Vector2 mousePos = Input.mousePosition;
+        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
+        if (Input.GetMouseButton(0))
+        {
+            gameObject.transform.position = mousePos;
+        }
+    }
     // Formula símples
     /*
      planet = GameObject.FindGameObjectsWithTag("planet");
