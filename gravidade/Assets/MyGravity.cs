@@ -78,7 +78,10 @@ public class MyGravity : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            gameObject.transform.position = mousePos;
+            if (Vector2.Distance(transform.position, mousePos) < 0.5f)
+            {
+                gameObject.transform.position = mousePos;
+            }
         }
     }
     // Formula símples
